@@ -22,37 +22,20 @@
 	#export CROSS_PREFIX="arm-eabi-4.6/bin/arm-eabi-"
 	#export CROSS_PREFIX="sabermod-androideabi-4.8.3/bin/arm-linux-androideabi-"
 	#export CROSS_PREFIX="arm-cortex_a15-linux-gnueabihf-linaro_4.8.3-2014.01/bin/arm-cortex_a15-linux-gnueabihf-"
-	export CROSS_PREFIX="arm-cortex_a15-linux-gnueabihf-linaro_4.9.1-2014.05/bin/arm-cortex_a15-linux-gnueabihf-"
+	export CROSS_PREFIX="/opt/linaro_toolchains_2014/arm-cortex_a15-linux-gnueabihf-linaro_4.9.1-2014.07/bin"
 
 # -------darwin-x86
 	#export CROSS_PREFIX=""
 
 ########## End of basic configuration ############
 
-setup ()
-{
-function mka() {
-    case `uname -s` in
-        Darwin)
-            make -j `sysctl hw.ncpu|cut -d" " -f2` "$@"
-            ;;
-        *)
-            schedtool -B -n 1 -e ionice -n 1 make -j `cat /proc/cpuinfo | grep "^processor" | wc -l` "$@"
-            ;;
-    esac
-};
+setup () {
+	
+    function mka() {
+        schedtool -B -n 1 -e ionice -n 1 make -j `cat /proc/cpuinfo | grep "^processor" | wc -l` "$@"
+    };
 
-#   Arch-dependent definitions
-    case `uname -s` in
-        Darwin)
-            KERNEL_DIR="$(dirname "$(greadlink -f "$0")")"
-            CROSS_PREFIX="$KERNEL_DIR/../toolchains/$CROSS_PREFIX"
-            ;;
-        *)
-            KERNEL_DIR="$(dirname "$(readlink -f "$0")")"
-            CROSS_PREFIX="$KERNEL_DIR/../toolchains/$CROSS_PREFIX"
-            ;;
-    esac
+    KERNEL_DIR="$(dirname "$(readlink -f "$0")")"
 
     BUILD_DIR="../glitch-build/kernel"
 
