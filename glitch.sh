@@ -96,7 +96,7 @@ cd release/aroma
 counter=$((counter + 1))
 
 mkdir -p $KERNEL_DIR/release/$target_device
-REL=Glitch-$target_name-r$counter$target_variant.zip
+REL=Glitch-$target_name-r$counter-lounge.zip
 
 	zip -q -r ${REL} boot config META-INF system
 	#sha256sum ${REL} > ${REL}.sha256sum
